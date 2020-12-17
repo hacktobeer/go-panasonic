@@ -56,9 +56,10 @@ func main() {
 	readConfig()
 	user := viper.GetString("username")
 	pass := viper.GetString("password")
+	server := viper.GetString("server")
 
 	var client cloudcontrol.Client
-	err := client.CreateSession("", user, pass)
+	err := client.CreateSession("", user, pass, server)
 	if err != nil {
 		log.Fatalln(err)
 	}

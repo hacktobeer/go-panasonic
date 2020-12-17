@@ -18,11 +18,8 @@ import (
 type Client struct {
 	Utoken     string
 	DeviceGUID string
+	Server     string
 }
-
-var (
-	server = "https://accsmart.panasonic.com/"
-)
 
 // intPtr is a helper function that returns a pointer to an int
 func intPtr(i int) *int {
@@ -51,7 +48,7 @@ func (c *Client) setHeaders(req *http.Request) {
 }
 
 func (c *Client) doPostRequest(url string, postbody []byte) ([]byte, error) {
-	req, err := http.NewRequest("POST", server+url, bytes.NewBuffer(postbody))
+	req, err := http.NewRequest("POST", c.Server+url, bytes.NewBuffer(postbody))
 	c.setHeaders(req)
 
 	client := &http.Client{}
@@ -72,7 +69,7 @@ func (c *Client) doPostRequest(url string, postbody []byte) ([]byte, error) {
 
 func (c *Client) doGetRequest(url string) ([]byte, error) {
 	log.Println(url)
-	req, err := http.NewRequest("GET", server+url, nil)
+	req, err := http.NewRequest("GET", c.Server+url, nil)
 	c.setHeaders(req)
 
 	client := &http.Client{}
@@ -92,10 +89,16 @@ func (c *Client) doGetRequest(url string) ([]byte, error) {
 }
 
 // CreateSession creates a client connection to Panasonic Cloud Control
-func (c *Client) CreateSession(token string, username string, password string) error {
+func (c *Client) CreateSession(token string, username string, password string, server string) error {
 	if username == "" {
 		c.Utoken = token
 	}
+	if server != "" {
+		c.Server = server
+	} else {
+		c.Server = "https://accsmart.panasonic.com/"
+	}
+
 	postBody, _ := json.Marshal(map[string]string{
 		"language": "0",
 		"loginId":  username,
