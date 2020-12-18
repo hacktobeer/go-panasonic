@@ -72,6 +72,8 @@ func (c *Client) doGetRequest(url string) ([]byte, error) {
 	req, err := http.NewRequest("GET", c.Server+url, nil)
 	c.setHeaders(req)
 
+	//log.Printf("%#v\n", req)
+
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -80,6 +82,8 @@ func (c *Client) doGetRequest(url string) ([]byte, error) {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
+
+	// log.Println(string(body))
 
 	if resp.StatusCode > 200 {
 		return body, fmt.Errorf("HTTP Error: %s", resp.Status)
@@ -153,8 +157,8 @@ func (c *Client) ListDevices() ([]string, error) {
 }
 
 // GetDevice gets all details on a specific device
-func (c *Client) GetDevice(deviceGUID string) (pt.Device, error) {
-	body, err := c.doGetRequest(pt.URLDeviceStatus + url.QueryEscape(deviceGUID))
+func (c *Client) GetDevice() (pt.Device, error) {
+	body, err := c.doGetRequest(pt.URLDeviceStatus + url.QueryEscape(c.DeviceGUID))
 	if err != nil {
 		return pt.Device{}, fmt.Errorf("Error: %v %s", err, body)
 	}
@@ -195,15 +199,15 @@ func (c *Client) GetDeviceHistory(timeFrame int) (pt.History, error) {
 func (c *Client) control(command pt.Command) error {
 	postBody, _ := json.Marshal(command)
 
-	log.Println("JSON to be sent:")
-	log.Println(string(postBody))
+	// log.Println("JSON to be sent:")
+	// log.Println(string(postBody))
 
 	body, err := c.doPostRequest(pt.URLControl, postBody)
 	if err != nil {
 		return fmt.Errorf("Error: %v %s", err, body)
 	}
 
-	log.Println(string(body))
+	// log.Println(string(body))
 
 	return nil
 }
@@ -212,7 +216,7 @@ func (c *Client) control(command pt.Command) error {
 func (c *Client) SetTemperature(temperature float64) error {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
-		Parameters: pt.DeviceParameters{
+		Parameters: pt.DeviceControlParameters{
 			PtemperatureSet: &temperature,
 		},
 	}
@@ -224,7 +228,7 @@ func (c *Client) SetTemperature(temperature float64) error {
 func (c *Client) TurnOn() error {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
-		Parameters: pt.DeviceParameters{
+		Parameters: pt.DeviceControlParameters{
 			Poperate: intPtr(1),
 		},
 	}
@@ -236,7 +240,7 @@ func (c *Client) TurnOn() error {
 func (c *Client) TurnOff() error {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
-		Parameters: pt.DeviceParameters{
+		Parameters: pt.DeviceControlParameters{
 			Poperate: intPtr(0),
 		},
 	}
@@ -248,7 +252,7 @@ func (c *Client) TurnOff() error {
 func (c *Client) SetMode(mode int) error {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
-		Parameters: pt.DeviceParameters{},
+		Parameters: pt.DeviceControlParameters{},
 	}
 
 	command.Parameters.PoperationMode = intPtr(mode)

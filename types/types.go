@@ -24,7 +24,22 @@ var Modes = map[string]int{
 	"dry":  1,
 	"cool": 2,
 	"heat": 3,
-	"fan":  3,
+	"fan":  4,
+}
+
+// ModesReverse define the different AC modes the device can be in
+var ModesReverse = map[int]string{
+	0: "auto",
+	1: "dry",
+	2: "cool",
+	3: "heat",
+	4: "fan",
+}
+
+// Operate defines if the AC is on or off
+var Operate = map[int]string{
+	0: "Off",
+	1: "On",
 }
 
 // Session is a login session structure
@@ -47,8 +62,12 @@ type Group struct {
 	Devices   []Device `njson:"deviceList"`
 }
 
-//DeviceParameters are the device control parameters
-type DeviceParameters struct {
+// DeviceControlParameters are the device control parameters
+// used in Marshalling control commands
+// We need to duplicate this with pointers to make sure the
+// 'omitempty' parameter will not cancel out eg operate = 0
+// when sending control commands to the unit
+type DeviceControlParameters struct {
 	PactualNanoe             *int     `json:"actualNanoe,omitempty"`
 	PairDirection            *int     `json:"airDirection,omitempty"`
 	PairQuality              *int     `json:"airQuality,omitempty"`
@@ -78,6 +97,40 @@ type DeviceParameters struct {
 	PpowerfulMode            *bool    `json:"powerfulMode,omitempty"`
 	PtemperatureSet          *float64 `json:"temperatureSet,omitempty"` // Set Temperature
 	PupdateTime              *int     `json:"updateTime,omitempty"`
+}
+
+// DeviceParameters are the current device parameters
+// Used when UnMarshalling current device status
+type DeviceParameters struct {
+	PactualNanoe             int     `njson:"actualNanoe"`
+	PairDirection            int     `njson:"airDirection"`
+	PairQuality              int     `njson:"airQuality"`
+	PairSwingLR              int     `njson:"airSwingLR"`
+	PairSwingUD              int     `njson:"airSwingUD"`
+	Pdefrosting              int     `njson:"defrosting"`
+	PdevGUID                 string  `njson:"devGuid"`
+	PdevRacCommunicateStatus int     `njson:"devRacCommunicateStatus"`
+	PecoFunctionData         int     `njson:"ecoFunctionData"`
+	PecoMode                 int     `njson:"ecoMode"`
+	PecoNavi                 int     `njson:"ecoNavi"`
+	Permission               int     `njson:"permission"`
+	PerrorCode               int     `njson:"errorCode"`
+	PerrorCodeStr            string  `njson:"errorCodeStr"`
+	PerrorStatus             int     `njson:"errorStatus"`
+	PerrorStatusFlg          bool    `njson:"errorStatusFlg"`
+	PfanAutoMode             int     `njson:"fanAutoMode"`
+	PfanSpeed                int     `njson:"fanSpeed"`
+	PhttpErrorCode           int     `njson:"httpErrorCode"`
+	PiAuto                   int     `njson:"iAuto"`
+	PinsideTemperature       float64 `njson:"insideTemperature"`
+	Pnanoe                   int     `njson:"nanoe"`
+	Ponline                  bool    `njson:"online"`
+	Poperate                 int     `njson:"operate"`       // on/off
+	PoperationMode           int     `njson:"operationMode"` // Mode (heat, dry, etc)
+	PoutsideTemperature      float64 `njson:"outTemperature"`
+	PpowerfulMode            bool    `njson:"powerfulMode"`
+	PtemperatureSet          float64 `njson:"temperatureSet"` // Temperature
+	PupdateTime              int     `njson:"updateTime"`
 }
 
 //Device is Panasonic device
@@ -113,7 +166,7 @@ type Device struct {
 	SummerHouse        int              `njson:"summerHouse"`
 	TemperatureUnit    bool             `njson:"temperatureUnit"`
 	TimeStamp          int              `njson:"timestamp"`
-	Parameters         DeviceParameters `nsjon:"parameters"`
+	Parameters         DeviceParameters `njson:"parameters"`
 }
 
 // History is a list of HistoryEntry points with measurements
@@ -137,6 +190,6 @@ type HistoryEntry struct {
 
 // Command is basic command control structure
 type Command struct {
-	DeviceGUID string           `json:"deviceGuid"`
-	Parameters DeviceParameters `json:"parameters"`
+	DeviceGUID string                  `json:"deviceGuid"`
+	Parameters DeviceControlParameters `json:"parameters"`
 }

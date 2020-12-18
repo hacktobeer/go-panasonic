@@ -13,20 +13,20 @@ import (
 )
 
 var (
-	version = "development"
 	commit  = "development"
 	date    = "development"
+	version = "development"
 
-	versionFlag = flag.Bool("version", false, "Show build version information")
 	configFlag  = flag.String("config", "gopanasonic.yaml", "Path of YAML configuration file")
-	listFlag    = flag.Bool("list", false, "List available devices")
 	deviceFlag  = flag.String("device", "", "Device to issue command to")
-	onFlag      = flag.Bool("on", false, "Turn device on")
-	offFlag     = flag.Bool("off", false, "Turn device off")
-	tempFlag    = flag.Float64("temp", 0, "Set the temperature (in Celsius)")
-	modeFlag    = flag.String("mode", "", "Set mode: auto,heat,cool,dry,fan")
-	statusFlag  = flag.Bool("status", false, "Display current status of device")
 	historyFlag = flag.String("history", "", "Display history: day,week,month,year")
+	listFlag    = flag.Bool("list", false, "List available devices")
+	modeFlag    = flag.String("mode", "", "Set mode: auto,heat,cool,dry,fan")
+	offFlag     = flag.Bool("off", false, "Turn device off")
+	onFlag      = flag.Bool("on", false, "Turn device on")
+	statusFlag  = flag.Bool("status", false, "Display current status of device")
+	tempFlag    = flag.Float64("temp", 0, "Set the temperature (in Celsius)")
+	versionFlag = flag.Bool("version", false, "Show build version information")
 )
 
 func readConfig() {
@@ -98,6 +98,29 @@ func main() {
 
 	if *statusFlag {
 		log.Println("Fetching status.....")
+		status, err := client.GetDevice()
+		if err != nil {
+			log.Fatalln(err)
+		}
+
+		fmt.Printf("GUID: %s\n", status.DeviceGUID)
+		fmt.Println("Capabilities:")
+		fmt.Printf("Auto mode: %t\n", status.AutoMode)
+		fmt.Printf("Heat mode: %t\n", status.HeatMode)
+		fmt.Printf("Dry mode: %t\n", status.DryMode)
+		fmt.Printf("Cool mode: %t\n", status.CoolMode)
+		fmt.Printf("Fan mode: %t\n", status.FanMode)
+		fmt.Printf("Fan Speed mode: %d\n", status.FanSpeedMode)
+		fmt.Printf("Quiet mode: %t\n", status.QuietMode)
+		fmt.Printf("Eco function: %t\n", status.EcoFunction)
+		fmt.Printf("EcoNavi function: %t\n", status.EcoNavi)
+		fmt.Printf("iAutoX: %t\n", status.IautoX)
+		fmt.Printf("NanoeX: %t\n", status.Nanoe)
+		fmt.Println("Current status:")
+		fmt.Printf("Status: %s\n", pt.Operate[status.Parameters.Poperate])
+		fmt.Printf("Online: %t\n", status.Parameters.Ponline)
+		fmt.Printf("Temperature: %0.1f\n", status.Parameters.PtemperatureSet)
+		fmt.Printf("Mode: %s\n", pt.ModesReverse[status.Parameters.PoperationMode])
 	}
 
 	if *historyFlag != "" {
