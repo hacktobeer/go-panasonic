@@ -212,8 +212,8 @@ func (c *Client) control(command pt.Command) error {
 func (c *Client) SetTemperature(temperature float64) error {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
-		Parameters: pt.CommandDetails{
-			TemperatureSet: &temperature,
+		Parameters: pt.DeviceParameters{
+			PtemperatureSet: &temperature,
 		},
 	}
 
@@ -224,8 +224,8 @@ func (c *Client) SetTemperature(temperature float64) error {
 func (c *Client) TurnOn() error {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
-		Parameters: pt.CommandDetails{
-			Operate: intPtr(1),
+		Parameters: pt.DeviceParameters{
+			Poperate: intPtr(1),
 		},
 	}
 
@@ -236,8 +236,8 @@ func (c *Client) TurnOn() error {
 func (c *Client) TurnOff() error {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
-		Parameters: pt.CommandDetails{
-			Operate: intPtr(0),
+		Parameters: pt.DeviceParameters{
+			Poperate: intPtr(0),
 		},
 	}
 
@@ -248,10 +248,10 @@ func (c *Client) TurnOff() error {
 func (c *Client) SetMode(mode int) error {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
-		Parameters: pt.CommandDetails{},
+		Parameters: pt.DeviceParameters{},
 	}
 
-	command.Parameters.OperationMode = intPtr(mode)
+	command.Parameters.PoperationMode = intPtr(mode)
 
 	return c.control(command)
 }
