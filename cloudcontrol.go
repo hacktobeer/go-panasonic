@@ -96,7 +96,7 @@ func (c *Client) CreateSession(token string, username string, password string, s
 	if server != "" {
 		c.Server = server
 	} else {
-		c.Server = "https://accsmart.panasonic.com/"
+		c.Server = pt.URLServer
 	}
 
 	postBody, _ := json.Marshal(map[string]string{
@@ -105,7 +105,7 @@ func (c *Client) CreateSession(token string, username string, password string, s
 		"password": password,
 	})
 
-	body, err := c.doPostRequest("auth/login", postBody)
+	body, err := c.doPostRequest(pt.URLLogin, postBody)
 	if err != nil {
 		return fmt.Errorf("Error: %v %s", err, body)
 	}
@@ -123,7 +123,7 @@ func (c *Client) CreateSession(token string, username string, password string, s
 
 // GetGroups gets all Panasonic Control groups associated to this account
 func (c *Client) GetGroups() (pt.Groups, error) {
-	body, err := c.doGetRequest("/device/group")
+	body, err := c.doGetRequest(pt.URLGroups)
 	if err != nil {
 		return pt.Groups{}, fmt.Errorf("Error: %v %s", err, body)
 	}
@@ -154,7 +154,7 @@ func (c *Client) ListDevices() ([]string, error) {
 
 // GetDevice gets all details on a specific device
 func (c *Client) GetDevice(deviceGUID string) (pt.Device, error) {
-	body, err := c.doGetRequest("/deviceStatus/now/" + url.QueryEscape(deviceGUID))
+	body, err := c.doGetRequest(pt.URLDeviceStatus + url.QueryEscape(deviceGUID))
 	if err != nil {
 		return pt.Device{}, fmt.Errorf("Error: %v %s", err, body)
 	}
@@ -177,7 +177,7 @@ func (c *Client) GetDeviceHistory(timeFrame int) (pt.History, error) {
 		"osTimezone": "+01:00",
 	})
 
-	body, err := c.doPostRequest("deviceHistoryData", postBody)
+	body, err := c.doPostRequest(pt.URLHistory, postBody)
 	if err != nil {
 		return pt.History{}, fmt.Errorf("Error: %v %s", err, body)
 	}
@@ -198,7 +198,7 @@ func (c *Client) control(command pt.Command) error {
 	log.Println("JSON to be sent:")
 	log.Println(string(postBody))
 
-	body, err := c.doPostRequest("deviceStatus/control", postBody)
+	body, err := c.doPostRequest(pt.URLControl, postBody)
 	if err != nil {
 		return fmt.Errorf("Error: %v %s", err, body)
 	}

@@ -1,5 +1,32 @@
 package types
 
+// Exported constants
+const (
+	URLServer       = "https://accsmart.panasonic.com"
+	URLLogin        = "/auth/login"
+	URLGroups       = "/device/group"
+	URLDeviceStatus = "/deviceStatus/now/"
+	URLHistory      = "/deviceHistoryData"
+	URLControl      = "/deviceStatus/control"
+)
+
+// HistoryDataMode maps out the time intervals to fetch history data
+var HistoryDataMode = map[string]int{
+	"day":   0,
+	"week":  1,
+	"month": 2,
+	"year":  3,
+}
+
+// Modes define the different AC modes the device can be in
+var Modes = map[string]int{
+	"auto": 0,
+	"dry":  1,
+	"cool": 2,
+	"heat": 3,
+	"fan":  3,
+}
+
 // Session is a login session structure
 type Session struct {
 	Utoken   string `njson:"uToken"`
@@ -101,32 +128,6 @@ type HistoryEntry struct {
 	AverageSettingTemp float64 `njson:"averageSettingTemp"`
 	AverageInsideTemp  float64 `njson:"averageInsideTemp"`
 	AverageOutsideTemp float64 `njson:"averageOutsideTemp"`
-}
-
-// HistoryDataMode maps out the time intervals to fetch history data
-var HistoryDataMode = map[string]int{
-	"day":   0,
-	"week":  1,
-	"month": 2,
-	"year":  3,
-}
-
-// Exported constants
-const (
-	ModeAuto = 0
-	ModeDry  = 1
-	ModeCool = 2
-	ModeHeat = 3
-	ModeFan  = 4
-)
-
-// Modes definesthe different AC modes the device can be in
-var Modes = map[string]int{
-	"auto": 0,
-	"dry":  1,
-	"cool": 2,
-	"heat": 3,
-	"fan":  3,
 }
 
 // Command is basic command control structure
