@@ -65,7 +65,7 @@ func main() {
 	}
 
 	if *listFlag {
-		log.Println("TODO Listing available devices.....")
+		log.Println("Listing available devices.....")
 		devices, err := client.ListDevices()
 		if err != nil {
 			log.Fatalln(err)
