@@ -6,14 +6,14 @@
 Why? I got a bit bored with the App, it was too slow for me and I could not automate anything. So this package and cli tool solves that problem.
 
 ## CLI tool
-You need a configuration file with the below content. The load the default file ```gopanasonic.yaml``` but it can also be passed with the cli flag ```-config [filepath]```.
+You need to create a configuration file with the below content. The tool tries to load the default file ```gopanasonic.yaml``` but it can also be passed with the cli flag ```-config [filepath]```.
 ```
 username: [your PCC username]
 password: [your PCC password]
 device: [Panasonic device name, see -list command]
 ```
 
-List all available Panasonic devices for account and add one of them to the configuration file.
+List all available Panasonic devices for account and manually add one of them to the configuration file.
 ```
 $ go-panasonic -list
 ```
