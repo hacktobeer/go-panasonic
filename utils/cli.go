@@ -16,12 +16,22 @@ var (
 	version = "development"
 	commit  = "development"
 	date    = "development"
+
+	versionFlag = flag.Bool("version", false, "Show build version information")
+	configFlag  = flag.String("config", "gopanasonic.yaml", "Path of YAML configuration file")
+	listFlag    = flag.Bool("list", false, "List available devices")
+	deviceFlag  = flag.String("device", "", "Device to issue command to")
+	onFlag      = flag.Bool("on", false, "Turn device on")
+	offFlag     = flag.Bool("off", false, "Turn device off")
+	tempFlag    = flag.Float64("temp", 0, "Set the temperature (in Celsius)")
+	modeFlag    = flag.String("mode", "", "Set mode: auto,heat,cool,dry,fan")
+	statusFlag  = flag.Bool("status", false, "Display current status of device")
+	historyFlag = flag.String("history", "", "Display history: day,week,month,year")
 )
 
 func readConfig() {
-	viper.SetConfigName("gopanasonic")
+	viper.SetConfigFile(*configFlag)
 	viper.SetConfigType("yaml")
-	viper.AddConfigPath(".")
 	err := viper.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("fatal error config file: %s", err))
@@ -29,16 +39,6 @@ func readConfig() {
 }
 
 func main() {
-	versionFlag := flag.Bool("version", false, "Show build version information")
-	listFlag := flag.Bool("list", false, "List available devices")
-	deviceFlag := flag.String("device", "", "Device to issue command to")
-	onFlag := flag.Bool("on", false, "Turn device on")
-	offFlag := flag.Bool("off", false, "Turn device off")
-	tempFlag := flag.Float64("temp", 0, "Set the temperature (in Celsius)")
-	modeFlag := flag.String("mode", "", "Set mode: auto,heat,cool,dry,fan")
-	statusFlag := flag.Bool("status", false, "Display current status of device")
-	historyFlag := flag.String("history", "", "Display history: day,week,month,year")
-
 	if len(os.Args) < 2 {
 		flag.PrintDefaults()
 		os.Exit(1)
