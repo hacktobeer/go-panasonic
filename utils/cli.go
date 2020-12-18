@@ -59,7 +59,7 @@ func main() {
 	server := viper.GetString("server")
 
 	var client cloudcontrol.Client
-	err := client.CreateSession("", user, pass, server)
+	_, err := client.CreateSession("", user, pass, server)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -137,7 +137,7 @@ func main() {
 
 	if *onFlag {
 		log.Println("Turning device on.....")
-		err = client.TurnOn()
+		_, err = client.TurnOn()
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -145,7 +145,7 @@ func main() {
 
 	if *offFlag {
 		log.Println("Turning device off....")
-		err = client.TurnOff()
+		_, err = client.TurnOff()
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -153,14 +153,14 @@ func main() {
 
 	if *tempFlag != 0 {
 		log.Printf("Setting temperature to %v degrees Celsius", *tempFlag)
-		err = client.SetTemperature(*tempFlag)
+		_, err = client.SetTemperature(*tempFlag)
 		if err != nil {
 			log.Fatalln(err)
 		}
 	}
 
 	if *modeFlag != "" {
-		err = client.SetMode(pt.Modes[*modeFlag])
+		_, err = client.SetMode(pt.Modes[*modeFlag])
 		if err != nil {
 			log.Fatalln(err)
 		}

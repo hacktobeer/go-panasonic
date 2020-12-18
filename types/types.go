@@ -8,6 +8,8 @@ const (
 	URLDeviceStatus = "/deviceStatus/now/"
 	URLHistory      = "/deviceHistoryData"
 	URLControl      = "/deviceStatus/control"
+	SuccessResponse = `{"result":0}`
+	FailureResponse = `{"result":1}`
 )
 
 // HistoryDataMode maps out the time intervals to fetch history data

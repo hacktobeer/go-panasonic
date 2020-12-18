@@ -93,14 +93,15 @@ func (c *Client) doGetRequest(url string) ([]byte, error) {
 }
 
 // CreateSession creates a client connection to Panasonic Cloud Control
-func (c *Client) CreateSession(token string, username string, password string, server string) error {
-	if username == "" {
-		c.Utoken = token
-	}
+func (c *Client) CreateSession(token string, username string, password string, server string) ([]byte, error) {
 	if server != "" {
 		c.Server = server
 	} else {
 		c.Server = pt.URLServer
+	}
+	if username == "" {
+		c.Utoken = token
+		return nil, nil
 	}
 
 	postBody, _ := json.Marshal(map[string]string{
@@ -111,7 +112,7 @@ func (c *Client) CreateSession(token string, username string, password string, s
 
 	body, err := c.doPostRequest(pt.URLLogin, postBody)
 	if err != nil {
-		return fmt.Errorf("Error: %v %s", err, body)
+		return nil, fmt.Errorf("Error: %v %s", err, body)
 	}
 
 	session := pt.Session{}
@@ -122,7 +123,7 @@ func (c *Client) CreateSession(token string, username string, password string, s
 
 	c.Utoken = session.Utoken
 
-	return nil
+	return body, nil
 }
 
 // GetGroups gets all Panasonic Control groups associated to this account
@@ -196,7 +197,7 @@ func (c *Client) GetDeviceHistory(timeFrame int) (pt.History, error) {
 }
 
 // control sends commands to the Panasonic cloud to control a device
-func (c *Client) control(command pt.Command) error {
+func (c *Client) control(command pt.Command) ([]byte, error) {
 	postBody, _ := json.Marshal(command)
 
 	// log.Println("JSON to be sent:")
@@ -204,16 +205,19 @@ func (c *Client) control(command pt.Command) error {
 
 	body, err := c.doPostRequest(pt.URLControl, postBody)
 	if err != nil {
-		return fmt.Errorf("Error: %v %s", err, body)
+		return nil, fmt.Errorf("Error: %v %s", err, body)
+	}
+	if string(body) != pt.SuccessResponse {
+		return body, fmt.Errorf("Error body: %v %s", err, body)
 	}
 
 	// log.Println(string(body))
 
-	return nil
+	return body, nil
 }
 
 // SetTemperature will turn the Panasonic device off
-func (c *Client) SetTemperature(temperature float64) error {
+func (c *Client) SetTemperature(temperature float64) ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
 		Parameters: pt.DeviceControlParameters{
@@ -225,7 +229,7 @@ func (c *Client) SetTemperature(temperature float64) error {
 }
 
 // TurnOn will switch the device on or off
-func (c *Client) TurnOn() error {
+func (c *Client) TurnOn() ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
 		Parameters: pt.DeviceControlParameters{
@@ -237,7 +241,7 @@ func (c *Client) TurnOn() error {
 }
 
 // TurnOff will switch the device on or off
-func (c *Client) TurnOff() error {
+func (c *Client) TurnOff() ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
 		Parameters: pt.DeviceControlParameters{
@@ -249,7 +253,7 @@ func (c *Client) TurnOff() error {
 }
 
 // SetMode will set the device to the requested AC mode
-func (c *Client) SetMode(mode int) error {
+func (c *Client) SetMode(mode int) ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
 		Parameters: pt.DeviceControlParameters{},
