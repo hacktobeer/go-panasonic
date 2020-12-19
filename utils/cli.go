@@ -81,10 +81,10 @@ func main() {
 		if len(devices) != 0 {
 			log.Printf("%d device(s) found:\n", len(devices))
 			for _, device := range devices {
-				log.Println(device)
+				fmt.Println(device)
 			}
 		} else {
-			log.Println("error: No devices for configured account")
+			log.Fatalln("error: No devices for configured account")
 		}
 		os.Exit(0)
 	}
@@ -105,7 +105,7 @@ func main() {
 
 	if *statusFlag {
 		log.Println("Fetching status.....")
-		status, err := client.GetDevice()
+		status, err := client.GetDeviceStatus()
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -124,10 +124,10 @@ func main() {
 		fmt.Printf("iAutoX: %t\n", status.IautoX)
 		fmt.Printf("NanoeX: %t\n", status.Nanoe)
 		fmt.Println("Current status:")
-		fmt.Printf("Status: %s\n", pt.Operate[status.Parameters.Poperate])
-		fmt.Printf("Online: %t\n", status.Parameters.Ponline)
-		fmt.Printf("Temperature: %0.1f\n", status.Parameters.PtemperatureSet)
-		fmt.Printf("Mode: %s\n", pt.ModesReverse[status.Parameters.PoperationMode])
+		fmt.Printf("Status: %s\n", pt.Operate[status.Parameters.Operate])
+		fmt.Printf("Online: %t\n", status.Parameters.Online)
+		fmt.Printf("Temperature: %0.1f\n", status.Parameters.TemperatureSet)
+		fmt.Printf("Mode: %s\n", pt.ModesReverse[status.Parameters.OperationMode])
 	}
 
 	if *historyFlag != "" {

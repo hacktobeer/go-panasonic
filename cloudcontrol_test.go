@@ -25,7 +25,7 @@ func Example() {
 	// Show the detailed device status
 	status, _ := client.GetDeviceStatus()
 	// Show the inside temperature measured by the device
-	fmt.Println(status.Parameters.PinsideTemperature)
+	fmt.Println(status.Parameters.InsideTemperature)
 	// Set the temperature on the device
 	client.SetTemperature(19.5)
 }

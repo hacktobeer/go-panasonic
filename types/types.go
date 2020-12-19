@@ -70,69 +70,69 @@ type Group struct {
 // 'omitempty' parameter will not cancel out eg operate = 0
 // when sending control commands to the unit
 type DeviceControlParameters struct {
-	PactualNanoe             *int     `json:"actualNanoe,omitempty"`
-	PairDirection            *int     `json:"airDirection,omitempty"`
-	PairQuality              *int     `json:"airQuality,omitempty"`
-	PairSwingLR              *int     `json:"airSwingLR,omitempty"`
-	PairSwingUD              *int     `json:"airSwingUD,omitempty"`
-	Pdefrosting              *int     `json:"defrosting,omitempty"`
-	PdevGUID                 *string  `json:"devGuid,omitempty"`
-	PdevRacCommunicateStatus *int     `json:"devRacCommunicateStatus,omitempty"`
-	PecoFunctionData         *int     `json:"ecoFunctionData,omitempty"`
-	PecoMode                 *int     `json:"ecoMode,omitempty"`
-	PecoNavi                 *int     `json:"ecoNavi,omitempty"`
-	Permission               *int     `json:"permission,omitempty"`
-	PerrorCode               *int     `json:"errorCode,omitempty"`
-	PerrorCodeStr            *string  `json:"errorCodeStr,omitempty"`
-	PerrorStatus             *int     `json:"errorStatus,omitempty"`
-	PerrorStatusFlg          *bool    `json:"errorStatusFlg,omitempty"`
-	PfanAutoMode             *int     `json:"fanAutoMode,omitempty"`
-	PfanSpeed                *int     `json:"fanSpeed,omitempty"`
-	PhttpErrorCode           *int     `json:"httpErrorCode,omitempty"`
-	PiAuto                   *int     `json:"iAuto,omitempty"`
-	PinsideTemperature       *float64 `json:"insideTemperature,omitempty"`
-	Pnanoe                   *int     `json:"nanoe,omitempty"`
-	Ponline                  *bool    `json:"online,omitempty"`
-	Poperate                 *int     `json:"operate,omitempty"`       // Turn on/off
-	PoperationMode           *int     `json:"operationMode,omitempty"` // Set Mode (heat, dry, etc)
-	PoutsideTemperature      *float64 `json:"outTemperature,omitempty"`
-	PpowerfulMode            *bool    `json:"powerfulMode,omitempty"`
-	PtemperatureSet          *float64 `json:"temperatureSet,omitempty"` // Set Temperature
-	PupdateTime              *int     `json:"updateTime,omitempty"`
+	ActualNanoe             *int     `json:"actualNanoe,omitempty"`
+	AirDirection            *int     `json:"airDirection,omitempty"`
+	AirQuality              *int     `json:"airQuality,omitempty"`
+	AirSwingLR              *int     `json:"airSwingLR,omitempty"`
+	AirSwingUD              *int     `json:"airSwingUD,omitempty"`
+	Defrosting              *int     `json:"defrosting,omitempty"`
+	DevGUID                 *string  `json:"devGuid,omitempty"`
+	DevRacCommunicateStatus *int     `json:"devRacCommunicateStatus,omitempty"`
+	EcoFunctionData         *int     `json:"ecoFunctionData,omitempty"`
+	EcoMode                 *int     `json:"ecoMode,omitempty"`
+	EcoNavi                 *int     `json:"ecoNavi,omitempty"`
+	Permission              *int     `json:"permission,omitempty"`
+	ErrorCode               *int     `json:"errorCode,omitempty"`
+	ErrorCodeStr            *string  `json:"errorCodeStr,omitempty"`
+	ErrorStatus             *int     `json:"errorStatus,omitempty"`
+	ErrorStatusFlg          *bool    `json:"errorStatusFlg,omitempty"`
+	FanAutoMode             *int     `json:"fanAutoMode,omitempty"`
+	FanSpeed                *int     `json:"fanSpeed,omitempty"`
+	HTTPErrorCode           *int     `json:"httpErrorCode,omitempty"`
+	Iauto                   *int     `json:"iAuto,omitempty"`
+	InsideTemperature       *float64 `json:"insideTemperature,omitempty"`
+	Nanoe                   *int     `json:"nanoe,omitempty"`
+	Online                  *bool    `json:"online,omitempty"`
+	Operate                 *int     `json:"operate,omitempty"`       // Turn on/off
+	OperationMode           *int     `json:"operationMode,omitempty"` // Set Mode (heat, dry, etc)
+	OutsideTemperature      *float64 `json:"outTemperature,omitempty"`
+	PowerfulMode            *bool    `json:"powerfulMode,omitempty"`
+	TemperatureSet          *float64 `json:"temperatureSet,omitempty"` // Set Temperature
+	UpdateTime              *int     `json:"updateTime,omitempty"`
 }
 
 // DeviceParameters are the current device parameters
 // Used when UnMarshalling current device status
 type DeviceParameters struct {
-	PactualNanoe             int     `njson:"actualNanoe"`
-	PairDirection            int     `njson:"airDirection"`
-	PairQuality              int     `njson:"airQuality"`
-	PairSwingLR              int     `njson:"airSwingLR"`
-	PairSwingUD              int     `njson:"airSwingUD"`
-	Pdefrosting              int     `njson:"defrosting"`
-	PdevGUID                 string  `njson:"devGuid"`
-	PdevRacCommunicateStatus int     `njson:"devRacCommunicateStatus"`
-	PecoFunctionData         int     `njson:"ecoFunctionData"`
-	PecoMode                 int     `njson:"ecoMode"`
-	PecoNavi                 int     `njson:"ecoNavi"`
-	Permission               int     `njson:"permission"`
-	PerrorCode               int     `njson:"errorCode"`
-	PerrorCodeStr            string  `njson:"errorCodeStr"`
-	PerrorStatus             int     `njson:"errorStatus"`
-	PerrorStatusFlg          bool    `njson:"errorStatusFlg"`
-	PfanAutoMode             int     `njson:"fanAutoMode"`
-	PfanSpeed                int     `njson:"fanSpeed"`
-	PhttpErrorCode           int     `njson:"httpErrorCode"`
-	PiAuto                   int     `njson:"iAuto"`
-	PinsideTemperature       float64 `njson:"insideTemperature"`
-	Pnanoe                   int     `njson:"nanoe"`
-	Ponline                  bool    `njson:"online"`
-	Poperate                 int     `njson:"operate"`       // on/off
-	PoperationMode           int     `njson:"operationMode"` // Mode (heat, dry, etc)
-	PoutsideTemperature      float64 `njson:"outTemperature"`
-	PpowerfulMode            bool    `njson:"powerfulMode"`
-	PtemperatureSet          float64 `njson:"temperatureSet"` // Temperature
-	PupdateTime              int     `njson:"updateTime"`
+	ActualNanoe             int     `njson:"actualNanoe"`
+	AirDirection            int     `njson:"airDirection"`
+	AirQuality              int     `njson:"airQuality"`
+	AirSwingLR              int     `njson:"airSwingLR"`
+	AirSwingUD              int     `njson:"airSwingUD"`
+	Defrosting              int     `njson:"defrosting"`
+	DevGUID                 string  `njson:"devGuid"`
+	DevRacCommunicateStatus int     `njson:"devRacCommunicateStatus"`
+	EcoFunctionData         int     `njson:"ecoFunctionData"`
+	EcoMode                 int     `njson:"ecoMode"`
+	EcoNavi                 int     `njson:"ecoNavi"`
+	Permission              int     `njson:"permission"`
+	ErrorCode               int     `njson:"errorCode"`
+	ErrorCodeStr            string  `njson:"errorCodeStr"`
+	ErrorStatus             int     `njson:"errorStatus"`
+	ErrorStatusFlg          bool    `njson:"errorStatusFlg"`
+	FanAutoMode             int     `njson:"fanAutoMode"`
+	FanSpeed                int     `njson:"fanSpeed"`
+	HTTPErrorCode           int     `njson:"httpErrorCode"`
+	Iauto                   int     `njson:"iAuto"`
+	InsideTemperature       float64 `njson:"insideTemperature"`
+	Nanoe                   int     `njson:"nanoe"`
+	Online                  bool    `njson:"online"`
+	Operate                 int     `njson:"operate"`       // on/off
+	OperationMode           int     `njson:"operationMode"` // Mode (heat, dry, etc)
+	OutsideTemperature      float64 `njson:"outTemperature"`
+	PowerfulMode            bool    `njson:"powerfulMode"`
+	TemperatureSet          float64 `njson:"temperatureSet"` // Temperature
+	UpdateTime              int     `njson:"updateTime"`
 }
 
 //Device is Panasonic device

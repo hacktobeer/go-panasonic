@@ -232,7 +232,7 @@ func (c *Client) SetTemperature(temperature float64) ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
 		Parameters: pt.DeviceControlParameters{
-			PtemperatureSet: &temperature,
+			TemperatureSet: &temperature,
 		},
 	}
 
@@ -244,7 +244,7 @@ func (c *Client) TurnOn() ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
 		Parameters: pt.DeviceControlParameters{
-			Poperate: intPtr(1),
+			Operate: intPtr(1),
 		},
 	}
 
@@ -256,7 +256,7 @@ func (c *Client) TurnOff() ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
 		Parameters: pt.DeviceControlParameters{
-			Poperate: intPtr(0),
+			Operate: intPtr(0),
 		},
 	}
 
@@ -270,7 +270,7 @@ func (c *Client) SetMode(mode int) ([]byte, error) {
 		Parameters: pt.DeviceControlParameters{},
 	}
 
-	command.Parameters.PoperationMode = intPtr(mode)
+	command.Parameters.OperationMode = intPtr(mode)
 
 	return c.control(command)
 }
