@@ -1,7 +1,7 @@
 # go-panasonic
 
 ## Introduction
-```go-panasonic``` is a Golang package and cli tool to control Panasonic AC equipment connected through the Panasonic Comfort Cloud (PCC). This library and cli tool has much of the same functionality as the Panasonic Comfort Cloud App.
+```go-panasonic``` is a Golang package and cli tool to control Panasonic equipment connected through the Panasonic Comfort Cloud (PCC). This library and cli tool have much of the same functionality as the Panasonic Comfort Cloud App.
 
 Why? I got a bit bored with the App, it was too slow for me and I could not automate anything. So this package and cli tool solves that problem.
 
