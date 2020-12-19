@@ -1,6 +1,7 @@
 package cloudcontrol_test
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"os"
@@ -10,6 +11,24 @@ import (
 	"github.com/hacktobeer/gopanasonic/cloudcontrol"
 	pt "github.com/hacktobeer/gopanasonic/types"
 )
+
+// Example on how to use this package:
+func Example() {
+	// Create a new Panasonic Comfort Cloud client
+	client := cloudcontrol.NewClient("")
+	// Initiate a session with your username and password
+	client.CreateSession("", "username", "password")
+	// List the available devices in your account
+	devices, _ := client.ListDevices()
+	// Set the device we want to control
+	client.SetDevice(devices[0])
+	// Show the detailed device status
+	status, _ := client.GetDeviceStatus()
+	// Show the inside temperature measured by the device
+	fmt.Println(status.Parameters.PinsideTemperature)
+	// Set the temperature on the device
+	client.SetTemperature(19.5)
+}
 
 //var server *httptest.Server
 var (

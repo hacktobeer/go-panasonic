@@ -1,3 +1,5 @@
+// Package cloudcontrol package is a Go package to control
+// Panasonic Comfort Cloud devices.
 package cloudcontrol
 
 import (
@@ -14,28 +16,29 @@ import (
 	"github.com/m7shapan/njson"
 )
 
-// Client is a Cloud Control client
+// Client is a Panasonic Comfort Cloud client.
 type Client struct {
 	Utoken     string
 	DeviceGUID string
 	Server     string
 }
 
-// intPtr is a helper function that returns a pointer to an int
+// intPtr is a helper function that returns a pointer to an int.
 func intPtr(i int) *int {
 	return &i
 }
 
-// intPtr is a helper function that returns a pointer to an bool
+// intPtr is a helper function that returns a pointer to an bool.
 func boolPtr(b bool) *bool {
 	return &b
 }
 
-// SetDevice sets the device GUID on the client
+// SetDevice sets the device GUID on the client.
 func (c *Client) SetDevice(deviceGUID string) {
 	c.DeviceGUID = deviceGUID
 }
 
+// setHeaders sets the required http request headers.
 func (c *Client) setHeaders(req *http.Request) {
 	if c.Utoken != "" {
 		req.Header.Set("X-User-Authorization", c.Utoken)
@@ -47,6 +50,7 @@ func (c *Client) setHeaders(req *http.Request) {
 	req.Header.Set("Content-Type", "application/json")
 }
 
+// doPostRequest will send a HTTP POST request.
 func (c *Client) doPostRequest(url string, postbody []byte) ([]byte, error) {
 	req, err := http.NewRequest("POST", c.Server+url, bytes.NewBuffer(postbody))
 	c.setHeaders(req)
@@ -67,6 +71,7 @@ func (c *Client) doPostRequest(url string, postbody []byte) ([]byte, error) {
 	return body, nil
 }
 
+// doGetRequest will send a HTTP GET request.
 func (c *Client) doGetRequest(url string) ([]byte, error) {
 	req, err := http.NewRequest("GET", c.Server+url, nil)
 	c.setHeaders(req)
@@ -91,7 +96,7 @@ func (c *Client) doGetRequest(url string) ([]byte, error) {
 	return body, nil
 }
 
-// NewClient creates a new Panasonic Cloud Control client
+// NewClient creates a new Panasonic Comfort Cloud client.
 func NewClient(server string) Client {
 	client := Client{}
 	if server != "" {
@@ -103,7 +108,7 @@ func NewClient(server string) Client {
 	return client
 }
 
-// CreateSession creates a client connection to Panasonic Cloud Control
+// CreateSession initialises a client session to Panasonic Comfort Cloud.
 func (c *Client) CreateSession(token string, username string, password string) ([]byte, error) {
 	if username == "" {
 		c.Utoken = token
@@ -132,7 +137,7 @@ func (c *Client) CreateSession(token string, username string, password string) (
 	return body, nil
 }
 
-// GetGroups gets all Panasonic Control groups associated to this account
+// GetGroups gets all Panasonic Comfort Cloud groups associated to this account.
 func (c *Client) GetGroups() (pt.Groups, error) {
 	body, err := c.doGetRequest(pt.URLGroups)
 	if err != nil {
@@ -147,7 +152,7 @@ func (c *Client) GetGroups() (pt.Groups, error) {
 	return groups, nil
 }
 
-// ListDevices lists all available devices
+// ListDevices lists all available devices.
 func (c *Client) ListDevices() ([]string, error) {
 	available := []string{}
 	groups, err := c.GetGroups()
@@ -163,8 +168,8 @@ func (c *Client) ListDevices() ([]string, error) {
 	return available, nil
 }
 
-// GetDevice gets all details on a specific device
-func (c *Client) GetDevice() (pt.Device, error) {
+// GetDeviceStatus gets all details for a specific device.
+func (c *Client) GetDeviceStatus() (pt.Device, error) {
 	body, err := c.doGetRequest(pt.URLDeviceStatus + url.QueryEscape(c.DeviceGUID))
 	if err != nil {
 		return pt.Device{}, fmt.Errorf("Error: %v %s", err, body)
@@ -179,7 +184,7 @@ func (c *Client) GetDevice() (pt.Device, error) {
 	return device, nil
 }
 
-// GetDeviceHistory will fetch historical device data from Panasonic
+// GetDeviceHistory will fetch historical device data from Panasonic.
 func (c *Client) GetDeviceHistory(timeFrame int) (pt.History, error) {
 	postBody, _ := json.Marshal(map[string]string{
 		"dataMode":   fmt.Sprint(timeFrame),
@@ -202,7 +207,7 @@ func (c *Client) GetDeviceHistory(timeFrame int) (pt.History, error) {
 	return history, nil
 }
 
-// control sends commands to the Panasonic cloud to control a device
+// control sends commands to the Panasonic cloud to control a device.
 func (c *Client) control(command pt.Command) ([]byte, error) {
 	postBody, _ := json.Marshal(command)
 
@@ -222,7 +227,7 @@ func (c *Client) control(command pt.Command) ([]byte, error) {
 	return body, nil
 }
 
-// SetTemperature will turn the Panasonic device off
+// SetTemperature will set the temperature for a device.
 func (c *Client) SetTemperature(temperature float64) ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
@@ -234,7 +239,7 @@ func (c *Client) SetTemperature(temperature float64) ([]byte, error) {
 	return c.control(command)
 }
 
-// TurnOn will switch the device on
+// TurnOn will switch the device on.
 func (c *Client) TurnOn() ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
@@ -246,7 +251,7 @@ func (c *Client) TurnOn() ([]byte, error) {
 	return c.control(command)
 }
 
-// TurnOff will switch the device off
+// TurnOff will switch the device off.
 func (c *Client) TurnOff() ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
@@ -258,7 +263,7 @@ func (c *Client) TurnOff() ([]byte, error) {
 	return c.control(command)
 }
 
-// SetMode will set the device to the requested AC mode
+// SetMode will set the device to the requested AC mode.
 func (c *Client) SetMode(mode int) ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
