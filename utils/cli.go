@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 
@@ -24,6 +25,7 @@ var (
 	modeFlag    = flag.String("mode", "", "Set mode: auto,heat,cool,dry,fan")
 	offFlag     = flag.Bool("off", false, "Turn device off")
 	onFlag      = flag.Bool("on", false, "Turn device on")
+	quietFlag   = flag.Bool("quiet", false, "Don't output any log messages")
 	statusFlag  = flag.Bool("status", false, "Display current status of device")
 	tempFlag    = flag.Float64("temp", 0, "Set the temperature (in Celsius)")
 	versionFlag = flag.Bool("version", false, "Show build version information")
@@ -53,13 +55,18 @@ func main() {
 		os.Exit(0)
 	}
 
+	if *quietFlag {
+		log.SetFlags(0)
+		log.SetOutput(ioutil.Discard)
+	}
+
 	readConfig()
 	user := viper.GetString("username")
 	pass := viper.GetString("password")
 	server := viper.GetString("server")
 
-	var client cloudcontrol.Client
-	_, err := client.CreateSession("", user, pass, server)
+	client := cloudcontrol.NewClient(server)
+	_, err := client.CreateSession("", user, pass)
 	if err != nil {
 		log.Fatalln(err)
 	}

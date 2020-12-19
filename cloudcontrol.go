@@ -68,7 +68,6 @@ func (c *Client) doPostRequest(url string, postbody []byte) ([]byte, error) {
 }
 
 func (c *Client) doGetRequest(url string) ([]byte, error) {
-	log.Println(url)
 	req, err := http.NewRequest("GET", c.Server+url, nil)
 	c.setHeaders(req)
 
@@ -92,13 +91,20 @@ func (c *Client) doGetRequest(url string) ([]byte, error) {
 	return body, nil
 }
 
-// CreateSession creates a client connection to Panasonic Cloud Control
-func (c *Client) CreateSession(token string, username string, password string, server string) ([]byte, error) {
+// NewClient creates a new Panasonic Cloud Control client
+func NewClient(server string) Client {
+	client := Client{}
 	if server != "" {
-		c.Server = server
+		client.Server = server
 	} else {
-		c.Server = pt.URLServer
+		client.Server = pt.URLServer
 	}
+
+	return client
+}
+
+// CreateSession creates a client connection to Panasonic Cloud Control
+func (c *Client) CreateSession(token string, username string, password string) ([]byte, error) {
 	if username == "" {
 		c.Utoken = token
 		return nil, nil
@@ -228,7 +234,7 @@ func (c *Client) SetTemperature(temperature float64) ([]byte, error) {
 	return c.control(command)
 }
 
-// TurnOn will switch the device on or off
+// TurnOn will switch the device on
 func (c *Client) TurnOn() ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
@@ -240,7 +246,7 @@ func (c *Client) TurnOn() ([]byte, error) {
 	return c.control(command)
 }
 
-// TurnOff will switch the device on or off
+// TurnOff will switch the device off
 func (c *Client) TurnOff() ([]byte, error) {
 	command := pt.Command{
 		DeviceGUID: c.DeviceGUID,
