@@ -32,3 +32,9 @@ $ go-panasonic -history week
 $ go-panasonic -h
 $ go-panasonic -version
 ```
+
+Download the latest releases [here](https://github.com/hacktobeer/go-panasonic/releases). Releases are build for Linux (ARM as well), OSX and Windows.
+
+# Package
+
+The ```cloudcontrol``` package can be used to write your own tools to control devices in the Panasonic Comfort Cloud. Package documentation and exampe code can be found [here](https://pkg.go.dev/github.com/hacktobeer/go-panasonic).
