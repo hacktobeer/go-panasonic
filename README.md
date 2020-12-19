@@ -37,4 +37,4 @@ Download the latest releases [here](https://github.com/hacktobeer/go-panasonic/r
 
 # Package
 
-The ```cloudcontrol``` package can be used to write your own tools to control devices in the Panasonic Comfort Cloud. Package documentation and exampe code can be found [here](https://pkg.go.dev/github.com/hacktobeer/go-panasonic).
+The ```cloudcontrol``` package can be used to write your own tools to control devices in the Panasonic Comfort Cloud. Package documentation and exampe code can be found [here](https://pkg.go.dev/github.com/hacktobeer/go-panasonic#readme-package).
