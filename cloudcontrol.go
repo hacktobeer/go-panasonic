@@ -12,7 +12,7 @@ import (
 	"net/url"
 	"time"
 
-	pt "github.com/hacktobeer/gopanasonic/types"
+	pt "github.com/hacktobeer/go-panasonic/types"
 	"github.com/m7shapan/njson"
 )
 

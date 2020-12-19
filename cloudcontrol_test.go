@@ -8,8 +8,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/hacktobeer/gopanasonic/cloudcontrol"
-	pt "github.com/hacktobeer/gopanasonic/types"
+	cloudcontrol "github.com/hacktobeer/go-panasonic"
+	pt "github.com/hacktobeer/go-panasonic/types"
 )
 
 // Example on how to use this package:

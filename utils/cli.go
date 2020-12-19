@@ -7,8 +7,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/hacktobeer/gopanasonic/cloudcontrol"
-	pt "github.com/hacktobeer/gopanasonic/types"
+	"github.com/hacktobeer/go-panasonic/cloudcontrol"
+	pt "github.com/hacktobeer/go-panasonic/types"
 
 	"github.com/spf13/viper"
 )
