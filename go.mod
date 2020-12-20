@@ -9,5 +9,5 @@ require (
 	github.com/hacktobeer/go-panasonic v1.0.0
 	github.com/hacktobeer/go-panasonic/types v0.0.0-00010101000000-000000000000
 	github.com/m7shapan/njson v1.0.1
-	github.com/spf13/viper v1.7.1 // indirect
+	github.com/spf13/viper v1.7.1
 )
