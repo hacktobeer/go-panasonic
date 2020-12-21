@@ -48,6 +48,7 @@ func (c *Client) setHeaders(req *http.Request) {
 	req.Header.Set("User-Agent", "G-RAC")
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("Connection", "Keep-Alive")
 
 	log.Debugf("HTTP headers set to: %#v", req.Header)
 }
@@ -63,7 +64,7 @@ func (c *Client) doPostRequest(url string, postbody []byte) ([]byte, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
@@ -88,7 +89,7 @@ func (c *Client) doGetRequest(url string) ([]byte, error) {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 
@@ -117,13 +118,19 @@ func NewClient(server string) Client {
 	return client
 }
 
-// CreateSession initialises a client session to Panasonic Comfort Cloud.
-func (c *Client) CreateSession(token string, username string, password string) ([]byte, error) {
-	if username == "" {
-		c.Utoken = token
-		return nil, nil
+// ValidateSession checks if the session token is still valid.
+func (c *Client) ValidateSession(token string) ([]byte, error) {
+	c.Utoken = token
+	body, err := c.doGetRequest(pt.URLValidate1)
+	if err != nil {
+		return body, fmt.Errorf("error: %v %s", err, body)
 	}
 
+	return body, nil
+}
+
+// CreateSession initialises a client session to Panasonic Comfort Cloud.
+func (c *Client) CreateSession(username string, password string) ([]byte, error) {
 	postBody, _ := json.Marshal(map[string]string{
 		"language": "0",
 		"loginId":  username,
@@ -132,7 +139,7 @@ func (c *Client) CreateSession(token string, username string, password string) (
 
 	body, err := c.doPostRequest(pt.URLLogin, postBody)
 	if err != nil {
-		return nil, fmt.Errorf("Error: %v %s", err, body)
+		return nil, fmt.Errorf("error: %v %s", err, body)
 	}
 
 	session := pt.Session{}
@@ -150,7 +157,7 @@ func (c *Client) CreateSession(token string, username string, password string) (
 func (c *Client) GetGroups() (pt.Groups, error) {
 	body, err := c.doGetRequest(pt.URLGroups)
 	if err != nil {
-		return pt.Groups{}, fmt.Errorf("Error: %v %s", err, body)
+		return pt.Groups{}, fmt.Errorf("error: %v %s", err, body)
 	}
 	groups := pt.Groups{}
 	err = njson.Unmarshal([]byte(body), &groups)
@@ -181,7 +188,7 @@ func (c *Client) ListDevices() ([]string, error) {
 func (c *Client) GetDeviceStatus() (pt.Device, error) {
 	body, err := c.doGetRequest(pt.URLDeviceStatus + url.QueryEscape(c.DeviceGUID))
 	if err != nil {
-		return pt.Device{}, fmt.Errorf("Error: %v %s", err, body)
+		return pt.Device{}, fmt.Errorf("error: %v %s", err, body)
 	}
 
 	device := pt.Device{}
@@ -204,7 +211,7 @@ func (c *Client) GetDeviceHistory(timeFrame int) (pt.History, error) {
 
 	body, err := c.doPostRequest(pt.URLHistory, postBody)
 	if err != nil {
-		return pt.History{}, fmt.Errorf("Error: %v %s", err, body)
+		return pt.History{}, fmt.Errorf("error: %v %s", err, body)
 	}
 
 	history := pt.History{}
@@ -224,10 +231,10 @@ func (c *Client) control(command pt.Command) ([]byte, error) {
 
 	body, err := c.doPostRequest(pt.URLControl, postBody)
 	if err != nil {
-		return nil, fmt.Errorf("Error: %v %s", err, body)
+		return nil, fmt.Errorf("error: %v %s", err, body)
 	}
 	if string(body) != pt.SuccessResponse {
-		return body, fmt.Errorf("Error body: %v %s", err, body)
+		return body, fmt.Errorf("error body: %v %s", err, body)
 	}
 
 	return body, nil

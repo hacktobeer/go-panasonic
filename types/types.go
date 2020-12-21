@@ -8,6 +8,7 @@ const (
 	URLDeviceStatus = "/deviceStatus/now/"
 	URLHistory      = "/deviceHistoryData"
 	URLControl      = "/deviceStatus/control"
+	URLValidate1    = "/auth/agreement/status/1"
 	SuccessResponse = `{"result":0}`
 	FailureResponse = `{"result":1}`
 )

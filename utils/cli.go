@@ -68,12 +68,27 @@ func main() {
 	user := viper.GetString("username")
 	pass := viper.GetString("password")
 	server := viper.GetString("server")
+	token := viper.GetString("token")
 
 	client := cloudcontrol.NewClient(server)
 
-	_, err := client.CreateSession("", user, pass)
-	if err != nil {
-		log.Fatalln(err)
+	if token != "" {
+		if body, err := client.ValidateSession(token); err != nil {
+			log.Debugf("ValidateSession Error: %s", string(body))
+			if user != "" && pass != "" {
+				_, err := client.CreateSession(user, pass)
+				if err != nil {
+					log.Fatalln(err)
+				}
+				viper.Set("token", client.Utoken)
+				viper.WriteConfig()
+				log.Debug("New session token requested and written to config")
+			} else {
+				log.Fatalln("No username and password given, can't login.")
+			}
+		} else {
+			log.Debugln("Session token passed validation check")
+		}
 	}
 
 	if *listFlag {
@@ -107,7 +122,7 @@ func main() {
 	}
 	// Exit if no devices are configured
 	if client.DeviceGUID == "" {
-		log.Fatalln("error: No device configured, please use flag or configuration file")
+		log.Fatalln("error: No device configured, please use -device flag or configuration file")
 	}
 
 	if *statusFlag {
@@ -151,7 +166,7 @@ func main() {
 
 	if *onFlag {
 		log.Infoln("Turning device on.....")
-		_, err = client.TurnOn()
+		_, err := client.TurnOn()
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -159,7 +174,7 @@ func main() {
 
 	if *offFlag {
 		log.Infoln("Turning device off....")
-		_, err = client.TurnOff()
+		_, err := client.TurnOff()
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -167,7 +182,7 @@ func main() {
 
 	if *tempFlag != 0 {
 		log.Infof("Setting temperature to %v degrees Celsius", *tempFlag)
-		_, err = client.SetTemperature(*tempFlag)
+		_, err := client.SetTemperature(*tempFlag)
 		if err != nil {
 			log.Fatalln(err)
 		}
@@ -175,7 +190,7 @@ func main() {
 
 	if *modeFlag != "" {
 		log.Infof("Setting mode to %s", pt.Modes[*modeFlag])
-		_, err = client.SetMode(pt.Modes[*modeFlag])
+		_, err := client.SetMode(pt.Modes[*modeFlag])
 		if err != nil {
 			log.Fatalln(err)
 		}

@@ -17,7 +17,7 @@ func Example() {
 	// Create a new Panasonic Comfort Cloud client
 	client := cloudcontrol.NewClient("")
 	// Initiate a session with your username and password
-	client.CreateSession("", "username", "password")
+	client.CreateSession("username", "password")
 	// List the available devices in your account
 	devices, _ := client.ListDevices()
 	// Set the device we want to control
@@ -107,7 +107,7 @@ func TestSetDevice(t *testing.T) {
 }
 
 func TestTurnOn(t *testing.T) {
-	client.CreateSession("", "", "")
+	client.CreateSession("", "")
 	body, err := client.TurnOn()
 	if err != nil {
 		t.Errorf("TestTurnOn() returned an error: %v", err)
@@ -120,7 +120,7 @@ func TestTurnOn(t *testing.T) {
 }
 
 func TestGetGroups(t *testing.T) {
-	client.CreateSession("", "", "")
+	client.CreateSession("", "")
 	groups, _ := client.GetGroups()
 	want := "My House"
 	got := groups.Groups[0].GroupName
@@ -135,9 +135,8 @@ func TestGetGroups(t *testing.T) {
 func TestCreateSessionCustomToken(t *testing.T) {
 	username := ""
 	password := ""
-	token := "token12345"
 
-	body, _ := client.CreateSession(token, username, password)
+	body, _ := client.CreateSession(username, password)
 	if body != nil {
 		t.Error("TestCreateSessionCustomToken() got non-nil body")
 	}
@@ -152,9 +151,8 @@ func TestCreateSessionCustomToken(t *testing.T) {
 func TestCreateSession(t *testing.T) {
 	username := "test@test.com"
 	password := "secret1234"
-	token := ""
 
-	client.CreateSession(token, username, password)
+	client.CreateSession(username, password)
 
 	got := client.Utoken
 	want := "token12345"
