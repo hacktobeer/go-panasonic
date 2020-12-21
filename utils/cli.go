@@ -3,12 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
-	"log"
 	"os"
 
 	"github.com/hacktobeer/go-panasonic/cloudcontrol"
 	pt "github.com/hacktobeer/go-panasonic/types"
+	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/viper"
 )
@@ -19,6 +18,7 @@ var (
 	version = "development"
 
 	configFlag  = flag.String("config", "gopanasonic.yaml", "Path of YAML configuration file")
+	debugFlag   = flag.Bool("debug", false, "Show debug output")
 	deviceFlag  = flag.String("device", "", "Device to issue command to")
 	historyFlag = flag.String("history", "", "Display history: day,week,month,year")
 	listFlag    = flag.Bool("list", false, "List available devices")
@@ -48,16 +48,20 @@ func main() {
 
 	flag.Parse()
 
+	if *quietFlag {
+		log.SetLevel(log.PanicLevel)
+	}
+
+	if *debugFlag {
+		log.SetLevel(log.DebugLevel)
+		log.Debug("Logging set to debug level")
+	}
+
 	if *versionFlag {
 		fmt.Printf("version: %s\n", version)
 		fmt.Printf("commit: %s\n", commit)
 		fmt.Printf("date: %s\n", date)
 		os.Exit(0)
-	}
-
-	if *quietFlag {
-		log.SetFlags(0)
-		log.SetOutput(ioutil.Discard)
 	}
 
 	readConfig()
@@ -66,20 +70,21 @@ func main() {
 	server := viper.GetString("server")
 
 	client := cloudcontrol.NewClient(server)
+
 	_, err := client.CreateSession("", user, pass)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
 	if *listFlag {
-		log.Println("Listing available devices.....")
+		log.Infoln("Listing available devices.....")
 		devices, err := client.ListDevices()
 		if err != nil {
 			log.Fatalln(err)
 		}
 
 		if len(devices) != 0 {
-			log.Printf("%d device(s) found:\n", len(devices))
+			log.Infof("%d device(s) found:\n", len(devices))
 			for _, device := range devices {
 				fmt.Println(device)
 			}
@@ -91,11 +96,13 @@ func main() {
 
 	// Read device from flag
 	if *deviceFlag != "" {
+		log.Debugf("Device set to %s", *deviceFlag)
 		client.SetDevice(*deviceFlag)
 	}
 	// Read device from configuration file
 	configDevice := viper.GetString("device")
 	if configDevice != "" {
+		log.Debugf("Device set to %s", configDevice)
 		client.SetDevice(configDevice)
 	}
 	// Exit if no devices are configured
@@ -104,7 +111,7 @@ func main() {
 	}
 
 	if *statusFlag {
-		log.Println("Fetching status.....")
+		log.Infoln("Fetching status.....")
 		status, err := client.GetDeviceStatus()
 		if err != nil {
 			log.Fatalln(err)
@@ -131,7 +138,7 @@ func main() {
 	}
 
 	if *historyFlag != "" {
-		log.Printf("Fetching historical data for this %s.....\n", *historyFlag)
+		log.Infof("Fetching historical data for this %s.....\n", *historyFlag)
 		history, err := client.GetDeviceHistory(pt.HistoryDataMode[*historyFlag])
 		if err != nil {
 			log.Fatalln(err)
@@ -143,7 +150,7 @@ func main() {
 	}
 
 	if *onFlag {
-		log.Println("Turning device on.....")
+		log.Infoln("Turning device on.....")
 		_, err = client.TurnOn()
 		if err != nil {
 			log.Fatalln(err)
@@ -151,7 +158,7 @@ func main() {
 	}
 
 	if *offFlag {
-		log.Println("Turning device off....")
+		log.Infoln("Turning device off....")
 		_, err = client.TurnOff()
 		if err != nil {
 			log.Fatalln(err)
@@ -159,7 +166,7 @@ func main() {
 	}
 
 	if *tempFlag != 0 {
-		log.Printf("Setting temperature to %v degrees Celsius", *tempFlag)
+		log.Infof("Setting temperature to %v degrees Celsius", *tempFlag)
 		_, err = client.SetTemperature(*tempFlag)
 		if err != nil {
 			log.Fatalln(err)
@@ -167,6 +174,7 @@ func main() {
 	}
 
 	if *modeFlag != "" {
+		log.Infof("Setting mode to %s", pt.Modes[*modeFlag])
 		_, err = client.SetMode(pt.Modes[*modeFlag])
 		if err != nil {
 			log.Fatalln(err)

@@ -7,13 +7,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/url"
 	"time"
 
 	pt "github.com/hacktobeer/go-panasonic/types"
 	"github.com/m7shapan/njson"
+	log "github.com/sirupsen/logrus"
 )
 
 // Client is a Panasonic Comfort Cloud client.
@@ -48,12 +48,17 @@ func (c *Client) setHeaders(req *http.Request) {
 	req.Header.Set("User-Agent", "G-RAC")
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	req.Header.Set("Content-Type", "application/json")
+
+	log.Debugf("HTTP headers set to: %#v", req.Header)
 }
 
 // doPostRequest will send a HTTP POST request.
 func (c *Client) doPostRequest(url string, postbody []byte) ([]byte, error) {
 	req, err := http.NewRequest("POST", c.Server+url, bytes.NewBuffer(postbody))
 	c.setHeaders(req)
+
+	log.Debugf("POST request URL: %#v\n", req.URL)
+	log.Debugf("POST request body: %#v\n", string(postbody))
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -63,6 +68,8 @@ func (c *Client) doPostRequest(url string, postbody []byte) ([]byte, error) {
 	defer resp.Body.Close()
 
 	body, _ := ioutil.ReadAll(resp.Body)
+
+	log.Debugf("POST response body: %s", string(body))
 
 	if resp.StatusCode > 200 {
 		return body, fmt.Errorf("HTTP Error: %s", resp.Status)
@@ -76,7 +83,7 @@ func (c *Client) doGetRequest(url string) ([]byte, error) {
 	req, err := http.NewRequest("GET", c.Server+url, nil)
 	c.setHeaders(req)
 
-	//log.Printf("%#v\n", req)
+	log.Debugf("GET request URL: %#v\n", req.URL)
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
@@ -87,7 +94,7 @@ func (c *Client) doGetRequest(url string) ([]byte, error) {
 
 	body, _ := ioutil.ReadAll(resp.Body)
 
-	// log.Println(string(body))
+	log.Debugf("GET response body: %s", string(body))
 
 	if resp.StatusCode > 200 {
 		return body, fmt.Errorf("HTTP Error: %s", resp.Status)
@@ -104,6 +111,8 @@ func NewClient(server string) Client {
 	} else {
 		client.Server = pt.URLServer
 	}
+
+	log.Debugf("Created new client for %s", client.Server)
 
 	return client
 }
@@ -211,8 +220,7 @@ func (c *Client) GetDeviceHistory(timeFrame int) (pt.History, error) {
 func (c *Client) control(command pt.Command) ([]byte, error) {
 	postBody, _ := json.Marshal(command)
 
-	// log.Println("JSON to be sent:")
-	// log.Println(string(postBody))
+	log.Debugf("Command: %s", postBody)
 
 	body, err := c.doPostRequest(pt.URLControl, postBody)
 	if err != nil {
@@ -221,8 +229,6 @@ func (c *Client) control(command pt.Command) ([]byte, error) {
 	if string(body) != pt.SuccessResponse {
 		return body, fmt.Errorf("Error body: %v %s", err, body)
 	}
-
-	// log.Println(string(body))
 
 	return body, nil
 }
