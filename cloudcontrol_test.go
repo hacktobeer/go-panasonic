@@ -132,22 +132,6 @@ func TestGetGroups(t *testing.T) {
 	}
 }
 
-func TestCreateSessionCustomToken(t *testing.T) {
-	username := ""
-	password := ""
-
-	body, _ := client.CreateSession(username, password)
-	if body != nil {
-		t.Error("TestCreateSessionCustomToken() got non-nil body")
-	}
-
-	got := client.Utoken
-	want := "token12345"
-	if diff := cmp.Diff(want, got); diff != "" {
-		t.Errorf("TestCreateSessionCustomToken() token mismatch (-want +got):\n%s", diff)
-	}
-}
-
 func TestCreateSession(t *testing.T) {
 	username := "test@test.com"
 	password := "secret1234"
