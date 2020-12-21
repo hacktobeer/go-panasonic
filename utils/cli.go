@@ -189,7 +189,7 @@ func main() {
 	}
 
 	if *modeFlag != "" {
-		log.Infof("Setting mode to %s", pt.Modes[*modeFlag])
+		log.Infof("Setting mode to %s", *modeFlag)
 		_, err := client.SetMode(pt.Modes[*modeFlag])
 		if err != nil {
 			log.Fatalln(err)

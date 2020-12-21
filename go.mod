@@ -2,6 +2,8 @@ module github.com/hacktobeer/go-panasonic/cloudcontrol
 
 go 1.15
 
+replace github.com/hacktobeer/go-panasonic => ./
+
 replace github.com/hacktobeer/go-panasonic/types => ./types/
 
 require (
