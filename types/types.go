@@ -47,22 +47,22 @@ var Operate = map[int]string{
 
 // Session is a login session structure
 type Session struct {
-	Utoken   string `njson:"uToken"`
-	Result   int    `njson:"result"`
-	Language int    `njson:"language"`
+	Utoken   string `json:"uToken"`
+	Result   int    `json:"result"`
+	Language int    `json:"language"`
 }
 
 // Groups is a set of grouped devices
 type Groups struct {
-	GroupCount int     `njson:"groupCount"`
-	Groups     []Group `njson:"groupList"`
+	GroupCount int     `json:"groupCount"`
+	Groups     []Group `json:"groupList"`
 }
 
 // Group defines a control group with devices
 type Group struct {
-	GroupID   int      `njson:"groupId"`
-	GroupName string   `njson:"groupName"`
-	Devices   []Device `njson:"deviceList"`
+	GroupID   int      `json:"groupId"`
+	GroupName string   `json:"groupName"`
+	Devices   []Device `json:"deviceList"`
 }
 
 // DeviceControlParameters are the device control parameters
@@ -105,90 +105,90 @@ type DeviceControlParameters struct {
 // DeviceParameters are the current device parameters
 // Used when UnMarshalling current device status
 type DeviceParameters struct {
-	ActualNanoe             int     `njson:"actualNanoe"`
-	AirDirection            int     `njson:"airDirection"`
-	AirQuality              int     `njson:"airQuality"`
-	AirSwingLR              int     `njson:"airSwingLR"`
-	AirSwingUD              int     `njson:"airSwingUD"`
-	Defrosting              int     `njson:"defrosting"`
-	DevGUID                 string  `njson:"devGuid"`
-	DevRacCommunicateStatus int     `njson:"devRacCommunicateStatus"`
-	EcoFunctionData         int     `njson:"ecoFunctionData"`
-	EcoMode                 int     `njson:"ecoMode"`
-	EcoNavi                 int     `njson:"ecoNavi"`
-	Permission              int     `njson:"permission"`
-	ErrorCode               int     `njson:"errorCode"`
-	ErrorCodeStr            string  `njson:"errorCodeStr"`
-	ErrorStatus             int     `njson:"errorStatus"`
-	ErrorStatusFlg          bool    `njson:"errorStatusFlg"`
-	FanAutoMode             int     `njson:"fanAutoMode"`
-	FanSpeed                int     `njson:"fanSpeed"`
-	HTTPErrorCode           int     `njson:"httpErrorCode"`
-	Iauto                   int     `njson:"iAuto"`
-	InsideTemperature       float64 `njson:"insideTemperature"`
-	Nanoe                   int     `njson:"nanoe"`
-	Online                  bool    `njson:"online"`
-	Operate                 int     `njson:"operate"`       // on/off
-	OperationMode           int     `njson:"operationMode"` // Mode (heat, dry, etc)
-	OutsideTemperature      float64 `njson:"outTemperature"`
-	PowerfulMode            bool    `njson:"powerfulMode"`
-	TemperatureSet          float64 `njson:"temperatureSet"` // Temperature
-	UpdateTime              int     `njson:"updateTime"`
+	ActualNanoe             int     `json:"actualNanoe"`
+	AirDirection            int     `json:"airDirection"`
+	AirQuality              int     `json:"airQuality"`
+	AirSwingLR              int     `json:"airSwingLR"`
+	AirSwingUD              int     `json:"airSwingUD"`
+	Defrosting              int     `json:"defrosting"`
+	DevGUID                 string  `json:"devGuid"`
+	DevRacCommunicateStatus int     `json:"devRacCommunicateStatus"`
+	EcoFunctionData         int     `json:"ecoFunctionData"`
+	EcoMode                 int     `json:"ecoMode"`
+	EcoNavi                 int     `json:"ecoNavi"`
+	Permission              int     `json:"permission"`
+	ErrorCode               int     `json:"errorCode"`
+	ErrorCodeStr            string  `json:"errorCodeStr"`
+	ErrorStatus             int     `json:"errorStatus"`
+	ErrorStatusFlg          bool    `json:"errorStatusFlg"`
+	FanAutoMode             int     `json:"fanAutoMode"`
+	FanSpeed                int     `json:"fanSpeed"`
+	HTTPErrorCode           int     `json:"httpErrorCode"`
+	Iauto                   int     `json:"iAuto"`
+	InsideTemperature       float64 `json:"insideTemperature"`
+	Nanoe                   int     `json:"nanoe"`
+	Online                  bool    `json:"online"`
+	Operate                 int     `json:"operate"`       // on/off
+	OperationMode           int     `json:"operationMode"` // Mode (heat, dry, etc)
+	OutsideTemperature      float64 `json:"outTemperature"`
+	PowerfulMode            bool    `json:"powerfulMode"`
+	TemperatureSet          float64 `json:"temperatureSet"` // Temperature
+	UpdateTime              int     `json:"updateTime"`
 }
 
 //Device is Panasonic device
 type Device struct {
-	AirSwingLR         bool             `njson:"airSwingLR"`
-	AutoMode           bool             `njson:"autoMode"`
-	AutoTempMax        int              `njson:"autoTempMax"`
-	AutoTempMin        int              `njson:"autoTempMin"`
-	CoolMode           bool             `njson:"coolMode"`
-	CoolTempMax        int              `njson:"coolTeampMax"`
-	CoolTempMin        int              `njson:"coolTempMin"`
-	DeviceGUID         string           `njson:"deviceGuid"`
-	DeviceHashGUID     string           `njson:"deviceHashGuid"`
-	DeviceModuleNumber string           `njson:"deviceModuleNumber"`
-	DeviceName         string           `njson:"deviceName"`
-	DeviceType         string           `njson:"deviceType"`
-	DryMode            bool             `njson:"dryMode"`
-	DryTempMax         int              `njson:"dryTempMax"`
-	DryTempMin         int              `njson:"dryTempMin"`
-	EcoFunction        bool             `njson:"ecoFunction"`
-	EcoNavi            bool             `njson:"ecoNavi"`
-	FanDirectionMode   int              `njson:"fanDirectionMode"`
-	FanMode            bool             `njson:"fanMode"`
-	FanSpeedMode       int              `njson:"fanSpeedMode"`
-	HeatMode           bool             `njson:"heatMode"`
-	HeatTempMax        int              `njson:"heatTempMax"`
-	HeatTempMin        int              `njson:"heatTeampMin"`
-	IautoX             bool             `njson:"iAutoX"`
-	ModeAvlAutoMode    bool             `njson:"modeAvlList.autoMode"`
-	ModeAvlFanMode     bool             `njson:"modeAvlList.fanMode"`
-	Nanoe              bool             `njson:"nanoe"`
-	QuietMode          bool             `njson:"quietMode"`
-	SummerHouse        int              `njson:"summerHouse"`
-	TemperatureUnit    bool             `njson:"temperatureUnit"`
-	TimeStamp          int              `njson:"timestamp"`
-	Parameters         DeviceParameters `njson:"parameters"`
+	AirSwingLR         bool             `json:"airSwingLR"`
+	AutoMode           bool             `json:"autoMode"`
+	AutoTempMax        int              `json:"autoTempMax"`
+	AutoTempMin        int              `json:"autoTempMin"`
+	CoolMode           bool             `json:"coolMode"`
+	CoolTempMax        int              `json:"coolTeampMax"`
+	CoolTempMin        int              `json:"coolTempMin"`
+	DeviceGUID         string           `json:"deviceGuid"`
+	DeviceHashGUID     string           `json:"deviceHashGuid"`
+	DeviceModuleNumber string           `json:"deviceModuleNumber"`
+	DeviceName         string           `json:"deviceName"`
+	DeviceType         string           `json:"deviceType"`
+	DryMode            bool             `json:"dryMode"`
+	DryTempMax         int              `json:"dryTempMax"`
+	DryTempMin         int              `json:"dryTempMin"`
+	EcoFunction        int              `json:"ecoFunction"`
+	EcoNavi            bool             `json:"ecoNavi"`
+	FanDirectionMode   int              `json:"fanDirectionMode"`
+	FanMode            bool             `json:"fanMode"`
+	FanSpeedMode       int              `json:"fanSpeedMode"`
+	HeatMode           bool             `json:"heatMode"`
+	HeatTempMax        int              `json:"heatTempMax"`
+	HeatTempMin        int              `json:"heatTeampMin"`
+	IautoX             bool             `json:"iAutoX"`
+	ModeAvlAutoMode    bool             `json:"modeAvlList.autoMode"`
+	ModeAvlFanMode     bool             `json:"modeAvlList.fanMode"`
+	Nanoe              bool             `json:"nanoe"`
+	QuietMode          bool             `json:"quietMode"`
+	SummerHouse        int              `json:"summerHouse"`
+	TemperatureUnit    int              `json:"temperatureUnit"`
+	TimeStamp          int              `json:"timestamp"`
+	Parameters         DeviceParameters `json:"parameters"`
 }
 
 // History is a list of HistoryEntry points with measurements
 type History struct {
-	EnergyConsumption  float64        `njson:"energyConsumption"`
-	EstimatedCost      float64        `njson:"estimatedCost"`
-	DeviceRegisterTime int            `njson:"deviceRegisterTime"`
-	CurrencyUnit       string         `njson:"currencyUnit"`
-	HistoryEntries     []HistoryEntry `njson:"historyDataList"`
+	EnergyConsumption  float64        `json:"energyConsumption"`
+	EstimatedCost      float64        `json:"estimatedCost"`
+	DeviceRegisterTime string         `json:"deviceRegisterTime"`
+	CurrencyUnit       string         `json:"currencyUnit"`
+	HistoryEntries     []HistoryEntry `json:"historyDataList"`
 }
 
 // HistoryEntry is detailed data for a given day,week,month,year
 type HistoryEntry struct {
-	DataNumber         int     `njson:"dataNumber"`
-	Consumption        float64 `njson:"consumption"`
-	Cost               float64 `njson:"cost"`
-	AverageSettingTemp float64 `njson:"averageSettingTemp"`
-	AverageInsideTemp  float64 `njson:"averageInsideTemp"`
-	AverageOutsideTemp float64 `njson:"averageOutsideTemp"`
+	DataNumber         int     `json:"dataNumber"`
+	Consumption        float64 `json:"consumption"`
+	Cost               float64 `json:"cost"`
+	AverageSettingTemp float64 `json:"averageSettingTemp"`
+	AverageInsideTemp  float64 `json:"averageInsideTemp"`
+	AverageOutsideTemp float64 `json:"averageOutsideTemp"`
 }
 
 // Command is basic command control structure

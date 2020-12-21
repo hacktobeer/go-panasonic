@@ -141,7 +141,7 @@ func main() {
 		fmt.Printf("Fan mode: %t\n", status.FanMode)
 		fmt.Printf("Fan Speed mode: %d\n", status.FanSpeedMode)
 		fmt.Printf("Quiet mode: %t\n", status.QuietMode)
-		fmt.Printf("Eco function: %t\n", status.EcoFunction)
+		fmt.Printf("Eco function: %d\n", status.EcoFunction)
 		fmt.Printf("EcoNavi function: %t\n", status.EcoNavi)
 		fmt.Printf("iAutoX: %t\n", status.IautoX)
 		fmt.Printf("NanoeX: %t\n", status.Nanoe)

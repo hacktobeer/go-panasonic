@@ -12,7 +12,6 @@ import (
 	"time"
 
 	pt "github.com/hacktobeer/go-panasonic/types"
-	"github.com/m7shapan/njson"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -143,7 +142,7 @@ func (c *Client) CreateSession(username string, password string) ([]byte, error)
 	}
 
 	session := pt.Session{}
-	err = njson.Unmarshal([]byte(body), &session)
+	err = json.Unmarshal([]byte(body), &session)
 	if err != nil {
 		log.Fatalf("unmarshal error %v: %s", err, body)
 	}
@@ -160,7 +159,7 @@ func (c *Client) GetGroups() (pt.Groups, error) {
 		return pt.Groups{}, fmt.Errorf("error: %v %s", err, body)
 	}
 	groups := pt.Groups{}
-	err = njson.Unmarshal([]byte(body), &groups)
+	err = json.Unmarshal([]byte(body), &groups)
 	if err != nil {
 		log.Fatalf("unmarshal error %v: %s", err, body)
 	}
@@ -192,7 +191,7 @@ func (c *Client) GetDeviceStatus() (pt.Device, error) {
 	}
 
 	device := pt.Device{}
-	err = njson.Unmarshal([]byte(body), &device)
+	err = json.Unmarshal([]byte(body), &device)
 	if err != nil {
 		log.Fatalf("unmarshal error %v: %s", err, body)
 	}
@@ -215,7 +214,7 @@ func (c *Client) GetDeviceHistory(timeFrame int) (pt.History, error) {
 	}
 
 	history := pt.History{}
-	err = njson.Unmarshal([]byte(body), &history)
+	err = json.Unmarshal([]byte(body), &history)
 	if err != nil {
 		log.Fatalf("unmarshal error %v: %s", err, body)
 	}
