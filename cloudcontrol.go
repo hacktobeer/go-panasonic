@@ -43,7 +43,7 @@ func (c *Client) setHeaders(req *http.Request) {
 		req.Header.Set("X-User-Authorization", c.Utoken)
 	}
 	req.Header.Set("X-APP-TYPE", "1")
-	req.Header.Set("X-APP-VERSION", "1.9.0")
+	req.Header.Set("X-APP-VERSION", "1.19.0")
 	req.Header.Set("User-Agent", "G-RAC")
 	req.Header.Set("Accept", "application/json; charset=utf-8")
 	req.Header.Set("Content-Type", "application/json")
